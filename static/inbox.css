@@ -1,0 +1,324 @@
+body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f3f3f3;
+        }
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #4285F4;
+            color: #fff;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        .sidebar h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #fff;
+            display: block;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main content styles */
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+        
+        .content h1 {
+            margin-top: 0;
+        }
+        
+        /* Example category styles */
+        .category {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .blk{
+          width:100%;
+          padding: 10px;
+        }
+        .blk:hover {
+          background-color: #f3f3f3;
+          color:black;
+          border-radius: 3px;
+          cursor: pointer;
+        }
+
+        .compose h2{
+            position: absolute;
+            top: 4%;
+            right: 7%;
+            text-align: right;
+            color: #4285F4;
+            font-size: 18px;
+        }
+        .compose-button {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            width: 50px;
+            height: 50px;
+            background-color: #4285F4;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+            font-size: 24px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .compose-button:hover {
+            background-color: #3367D6;
+            color:#000;
+        }
+
+        .container {
+          position: relative;
+          top: 48%;
+          left: 5%;
+          margin: 20px auto;
+          padding: 20px;
+          max-width: 80%;
+          height: 96%;
+          background-color: #fff;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          overflow: auto; /* Add overflow property for scrollbars */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #4285F4;
+            margin-bottom: 20px;
+        }
+
+        #total {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #sort{
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #number {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        table {
+            table-layout: fixed; /* Prevent table from expanding beyond container */
+            width: 100%;
+            border-bottom: #000;
+        }
+
+        th {
+            color: #000;
+            border-color: #000;
+            background-color: #4285F4;
+        }
+        td{
+            cursor: pointer;
+        }
+        tbody {
+            display: block; /* Enable vertical scrolling for tbody */
+            max-height: 70vh; /* Adjust the value to control the maximum height */
+            overflow-y: auto; /* Add vertical scrollbar for tbody */
+        }
+        a[target="_blank"]::after {
+            content: "";
+            width: 1em;
+            height: 1em;
+            margin: 0 0.05em 0 0.1em;
+            background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48cGF0aCBkPSJNOSAyTDkgMyAxMi4zIDMgNiA5LjMgNi43IDEwIDEzIDMuNyAxMyA3IDE0IDcgMTQgMlpNNCA0QzIuOSA0IDIgNC45IDIgNkwyIDEyQzIgMTMuMSAyLjkgMTQgNCAxNEwxMCAxNEMxMS4xIDE0IDEyIDEzLjEgMTIgMTJMMTIgNyAxMSA4IDExIDEyQzExIDEyLjYgMTAuNiAxMyAxMCAxM0w0IDEzQzMuNCAxMyAzIDEyLjYgMyAxMkwzIDZDMyA1LjQgMy40IDUgNCA1TDggNSA5IDRaIi8+PC9zdmc+) no-repeat;
+            background-size: contain;
+            display: inline-block;
+            vertical-align: text-bottom;
+          }
+        a[class="external"]{
+            text-decoration: none !important;
+        }
+        a[class="external"]:hover{
+            color:red;
+        }
+        thead,
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        tbody :hover{
+          background-color: darkgray;
+        }
+        thead {
+            /* Add sticky header for better scrolling experience */
+            position: sticky;
+            top: 0;
+            background-color: #4285F4;
+            color: #fff;
+            z-index: 1;
+        }
+        #logout {
+            background-color: #4285F4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            position:absolute;
+            bottom:2%;
+            left:50%;
+            transform: translateX(-50%);
+        }
+
+        #logout:hover {
+            background-color: red;
+        }
+        .labell{
+            position: relative;
+          background-color: #4285F4 !important;
+          border-radius: 3px;
+          text-align: center;
+          width:50%;
+          color:#fff;
+          font-size: medium;
+        }
+        .del:hover{
+            color:black;
+            background-color: red;
+        }
+        button{
+            border-radius: 3px;
+            border-style: groove;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+            transform: scale(1.2);
+            cursor: pointer;
+          }
+          /* Style the large checkboxes */
+.large-checkbox {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    padding-left: 35px; /* Space for the checkmark */
+    margin-bottom: 12px;
+    font-size: 18px; /* Adjust the font size of the checkbox label */
+    line-height: 1.8; /* Adjust the line height for better alignment */
+  }
+  
+  .large-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px; /* Adjust the size of the checkbox */
+    width: 24px; /* Adjust the size of the checkbox */
+    background-color: #ccc; /* Default background color of the checkbox */
+    border-radius: 4px;
+  }
+  
+  .large-checkbox:hover input ~ .checkmark {
+    background-color: #ddd; /* Background color when hovering over the checkbox */
+  }
+  
+  .large-checkbox input:checked ~ .checkmark {
+    background-color: #2196F3; /* Background color when checkbox is checked */
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .large-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .large-checkbox .checkmark:after {
+    left: 7px;
+  top: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%; /* Create a circle shape for the dot */
+  background-color: white; /* Set the color of the dot */
+  content: "";
+  }
+  td.checkbox-header,th.checkbox-header {
+    cursor: text;
+    width: 50px !important; /* Adjust the width as per your requirement */
+  }
+  #deleteButton {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  #cancelButton{
+    background-color: #275297;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  #cancelButton:hover{
+    background-color: #163955;
+  }
+  #deleteButton:hover {
+    background-color: #c82333;
+  }
+  .sort-buttons {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Add some spacing between buttons */
+    margin-bottom: 10px; /* Add margin at the bottom */
+  }
+  /* Add a class to hide the sort-by-month div when the buttons are visible */
+.sort-by-month.hidden {
+    display: none;
+  }
+  
