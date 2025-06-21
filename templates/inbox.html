@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gmail Inbox</title>
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href={{ url_for("static",filename="loading.css") }}>
+    <link rel="stylesheet"href={{ url_for("static",filename="inbox.css") }}>
+    <script>
+      var AllMails = [];
+        function logout() {
+        showLoading();
+        fetch("/logout")
+          .then(response => response.text())
+          .then(url => {
+            // Remove the current origin from the URL
+            window.location.href = "/";
+          });
+      }
+      function showLoading() {
+                document.getElementById("loading").style.display = "block";
+            }
+            function hideLoading() {
+                document.getElementById("loading").style.display = "none";
+            }
+            function updateMailCount(count) {
+            document.getElementById("mailCount").textContent = count;
+        }
+        function handleCheckboxClick() {
+              const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+              const deleteButton = document.getElementById('deleteButton');
+              const cancelButton = document.getElementById('cancelButton');
+              const sortDiv = document.getElementById('sort');
+
+              // Check if any checkbox is checked
+              const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+              if (anyChecked) {
+                // Show delete and cancel buttons, and hide sort div
+                deleteButton.style.display = 'block';
+                cancelButton.style.display = 'block';
+                sortDiv.classList.add('hidden');
+              } else {
+                // Show sort div, and hide delete and cancel buttons
+                deleteButton.style.display = 'none';
+                cancelButton.style.display = 'none';
+                sortDiv.classList.remove('hidden');
+              }
+            }
+            function uncheckAllCheckboxes() {
+              const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+              checkboxes.forEach(checkbox => (checkbox.checked = false));
+              handleCheckboxClick();
+            }
+
+        function showMails(){
+          let hml = '';
+          if (AllMails.length > 60){
+            showLoading();
+          }
+          for (let i = 0; i < AllMails.length; i++) {
+            const mls = AllMails[i];
+            if (true){
+              hml += `<tr>
+                    <td class="checkbox-header">
+                      <label class="large-checkbox">
+                        <input type="checkbox" id="checkbox_${mls.ID}" onclick="handleCheckboxClick('${mls.ID}')">
+                        <span class="checkmark"></span>
+                      </label>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Date}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.From}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.To}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">
+                      <div>
+                        <div class="labell">${mls.Category}</div>
+                      </div>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Message}</td></tr>`;
+                  }
+                  document.getElementById("result").innerHTML = hml;
+                  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                  checkboxes.forEach(checkbox => checkbox.onchange = function () {
+                    handleCheckboxChange();//this.id.split('_')[1]); // Call handleCheckboxChange with the emailId
+                  });
+                  hideLoading();
+              }
+        document.getElementById("result").innerHTML = hml;
+        hideLoading();
+      }
+        function deleteEmail(email_ids) {
+          showLoading();
+          fetch(`/delete_email/${JSON.stringify(email_ids)}`, { method: 'POST' })
+              .then(response => response.json())
+              .then(data => {
+                  console.log(data)
+                  if (data.success) {
+                      // Email deleted successfully, reload the email list
+                      for (let i =0; i<email_ids.length; i++){
+                        var email_id = email_ids[i];
+                        for (let i = 0; i < AllMails.length; i++) {
+                          const mls = AllMails[i];
+                          if (mls.ID == email_id){
+                            AllMails.splice(i, 1);
+                          }
+                        }
+                      }
+                      showMails();
+                      uncheckAllCheckboxes();
+                      hideLoading();
+                  } else {
+                      alert(data.message);
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  // alert('An error occurred while deleting the email.');
+                  alert(error)
+              });
+        }
+        function sortMails(cat){
+          let hml = '';
+          for (let i = 0; i < AllMails.length; i++) {
+            const mls = AllMails[i];
+            if (mls.Category[0] == cat){
+              hml += `<tr>
+                    <td class="checkbox-header">
+                      <label class="large-checkbox">
+                        <input type="checkbox" id="checkbox_${mls.ID}" onclick="handleCheckboxClick('${mls.ID}')">
+                        <span class="checkmark"></span>
+                      </label>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Date}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.From}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.To}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">
+                      <div>
+                        <div class="labell">${mls.Category}</div>
+                      </div>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Message}</td></tr>`;
+            }
+            document.getElementById("result").innerHTML = hml;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                  checkboxes.forEach(checkbox => checkbox.onchange = function () {
+                    handleCheckboxChange();//handleCheckboxChange(this.id.split('_')[1]); // Call handleCheckboxChange with the emailId
+                  });
+        }}
+            function sortByMonth(cat) {
+              showLoading();
+                let hml = '';
+                for (let i = 0; i < AllMails.length; i++) {
+                  const mls = AllMails[i];
+                  if (mls.Date.includes(cat)){
+                    hml += `<tr>
+                    <td class="checkbox-header">
+                      <label class="large-checkbox">
+                        <input type="checkbox" id="checkbox_${mls.ID}" onclick="handleCheckboxClick('${mls.ID}')">
+                        <span class="checkmark"></span>
+                      </label>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Date}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.From}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.To}</td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">
+                      <div>
+                        <div class="labell">${mls.Category}</div>
+                      </div>
+                    </td>
+                    <td onclick="window.location.href='https://mail.google.com/mail/u/0/#inbox/${mls.ID}'">${mls.Message}</td></tr>`;
+                  }
+                  document.getElementById("result").innerHTML = hml;
+                  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                  checkboxes.forEach(checkbox => checkbox.onchange = function () {
+                    handleCheckboxChange();//handleCheckboxChange(this.id.split('_')[1]); // Call handleCheckboxChange with the emailId
+                  });
+                  hideLoading();
+              }}
+              function confirmDelete(emailId) {
+                  const confirmation = window.confirm(`Are you sure you want to delete ${emailId.length} email(s)?`);
+                  if (confirmation) {
+                    deleteEmail(emailId);
+                  }
+                }
+            function deleteSelectedEmails(){
+              const selectedEmails = [];
+              const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+              checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                  // Extract the email ID from the checkbox ID (assuming the checkbox ID is in the format "checkbox_emailID")
+                  const emailId = checkbox.id.split('_')[1];
+                  selectedEmails.push(emailId);
+                }
+              });
+              confirmDelete(selectedEmails);
+            }
+            function fetchEmails() {
+              var old = parseInt(document.getElementById("mailCount").textContent);
+              const total = parseInt(document.getElementById("totalCount").textContent);
+              // var gold = 0;
+                // gold += 10;
+                console.log("fetch");
+                fetch('/fetch')
+                  .then(response => response.json())
+                  .then(data => {
+                      //console.log(data);
+                      const mail = data.mail;
+                      const mailCount = old+parseInt(mail.length);
+                      console.log(mailCount);
+                      updateMailCount(mailCount);
+                      for (let i = 0; i < mail.length; i++) {
+                          const mls = mail[i];
+                          AllMails.push(mls);
+                        if (mailCount < 50){
+                          showMails();
+                        }
+                      hideLoading();
+                  }
+                  if (mail.length != 0){
+                    fetchEmails();
+                  }
+                });
+          }
+        function isElementAtBottom(element) {
+            return element.scrollHeight - element.scrollTop === element.clientHeight;
+          }
+
+        function loadMoreEmails() {
+            const container = document.getElementById('result');
+            if (isElementAtBottom(container)) {
+              showMails();
+            }
+          }
+            document.addEventListener("DOMContentLoaded", fetchEmails);
+            document.addEventListener("DOMContentLoaded", function() {
+              const monthSelect = document.getElementById("monthSelect");
+              const container = document.getElementById('result');
+              container.addEventListener('scroll', loadMoreEmails);
+              monthSelect.addEventListener("change", function(event) {
+                const selectedMonth = event.target.value;
+                sortByMonth(selectedMonth);
+              });
+            });
+      </script>
+</head>
+
+<body>
+    <div id="loading" class="loading">
+        <!--img src={{ url_for("static",filename='loading2.gif') }} width='100%' height='100%'></img-->
+    </div>
+    <div>
+    <div class="sidebar">
+        <h2>Categories</h2><hr>
+        <ul>
+          <li class = "blk" onclick="showMails()">All</li>
+            <li class = "blk" onclick="sortMails('EDUCATIONAL')">EDUCATIONAL</li>
+            <li class = "blk" onclick="sortMails('SOCIAL')">SOCIAL</li>
+            <li class = "blk" onclick="sortMails('E-COMMERCE')">E-COMMERCE</li>
+            <li class = "blk" onclick="sortMails('PAYMENTS')">PAYMENTS</li>
+            <li class = "blk" onclick="sortMails('VERIFICATION')">VERIFICATION CODE</li>
+            <li class = "blk" onclick="sortMails('COMMUNITY')">COMMUNITY</li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1>Welcome to Gmail Inbox</h1>
+        <div id="total">Loaded Messages: <span id="mailCount">0</span> / <span id="totalCount">{{total}}</span></div>
+        <div class="sort-buttons">
+        <div id="sort" class="sort-by-month">Search By Month : <select id ="monthSelect">
+          {% for month in months %}
+            <option value="{{ month }}">{{ month }}</option>
+          {% endfor %}
+        </select></div>
+          <button id="deleteButton" style="display: none;" onclick="deleteSelectedEmails()">Delete 
+            <svg style="fill: white;" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+            <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" /></svg></button>
+          </div>
+        <hr>
+        <table id="table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="checkbox-header"><button id="cancelButton" style="display: none;" onclick="uncheckAllCheckboxes()">✖</button></th>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th></th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="result">
+              <!-- Mails Will be added here by javascript -->
+            </tbody>
+        </table>
+        <div class="compose">
+        <h2>Compose Mail</h2>
+        </div>
+        <a href="/compose" class="compose-button">
+          <span class="icon">+</span>
+        </a>
+        <button id="logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</body>
+
+</html>
